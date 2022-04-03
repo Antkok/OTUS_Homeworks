@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - Antkok-patch-1
+      - Homework_01
 
 jobs:
   build:
