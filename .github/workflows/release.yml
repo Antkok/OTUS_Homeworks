@@ -5,7 +5,9 @@ on:
     branches:
       - master
       - Homework_01
-
+    tags:        
+      - v1
+      
 jobs:
   build:
     runs-on: ubuntu-latest
