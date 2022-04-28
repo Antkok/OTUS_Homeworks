@@ -21,7 +21,7 @@ std::tuple<int, int, int, int> parse(const std::string& input)
 }
 
 void checkIp(const tupIp& ip) {
-	for (int i = 0; i < std::tuple_size<tupIp>::value; i++)
+	for (long unsigned int i = 0; i < std::tuple_size<tupIp>::value; i++)
 		if ((std::get<0>(ip) < 0) || (std::get<0>(ip) > 255)) {
 			std::cout << "Incorrect IP" << std::endl;
 		}
