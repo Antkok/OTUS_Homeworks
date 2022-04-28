@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - Homework_01
+      - Homework_02
     tags:        
       - v1
       
