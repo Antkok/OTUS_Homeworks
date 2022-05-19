@@ -1,21 +1,22 @@
 #include <iostream>
 #include <string>
-#include <tuple>
 #include <vector>
 #include <algorithm>
 #include "ip_filter.h"
+#include <array>
 
 using namespace std;
-
 int main() {
-	vector<tupIp> poolIp;
-	string text1, text2, text3;
+	vector<arrIp> poolIp;
+	string text;
+	textIP sortPrintIP;
 
-	while (getline(cin, text1)) {
-		if (text1 == "") //for windows
+	while (getline(cin, text)) {
+		if (text == "") //for windows
 			break;
-		tupIp ip = parse(text1);
-		checkIp(ip);
+		textIP parseText;
+		arrIp ip = parseText.parse(text);
+		parseText.checkIp(ip);
 		poolIp.emplace_back(std::move(ip));
 	}
 
@@ -23,21 +24,22 @@ int main() {
 		return a > b; 
 	});
 
-	for_each(poolIp.begin(), poolIp.end(), [](const tupIp& ip) {
-		PrintIP(ip);
+	for_each(poolIp.begin(), poolIp.end(), [](const arrIp& ip) {
+		textIP printIp;
+		printIp.printIP(ip);
 	});
 
-	sotrPrint(poolIp, [](const tupIp& ip) {
+	sortPrintIP.sotrPrint(poolIp, [](const arrIp& ip) {
 		if (get<0>(ip) == 1) return true;
 		else return false;
 	});
 
-	sotrPrint(poolIp, [](const tupIp& ip) {
+	sortPrintIP.sotrPrint(poolIp, [](const arrIp& ip) {
 		if (get<0>(ip) == 46 && get<1>(ip) == 70) return true;
 		else return false;
 	});
 
-	sotrPrint(poolIp, [](const tupIp& ip) {
+	sortPrintIP.sotrPrint(poolIp, [](const arrIp& ip) {
 		if (get<0>(ip) == 46 || get<1>(ip) == 46 || get<2>(ip) == 46 || get<3>(ip) == 46) return true;
 		else return false;
 	});
