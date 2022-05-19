@@ -29,7 +29,7 @@ arrIp textIP::parse(const std::string& input) {
 	{
 		return arrIp{ 0,0,0,0 };
 	}
-};
+}
 
 void textIP::checkIp(const arrIp& ip) {
 	for (long unsigned int i = 0; i < std::tuple_size<arrIp>::value; i++)
