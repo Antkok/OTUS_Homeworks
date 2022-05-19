@@ -5,10 +5,15 @@
 #include <vector>
 #include <algorithm>
 #include <vector>
+#include <array>
 
-using tupIp = std::tuple<int, int, int, int>;
+using arrIp = std::array<int,4>;
 
-std::tuple<int, int, int, int> parse(const std::string& input);
-void checkIp(const tupIp& ip);
-void PrintIP(const tupIp& ip);
-void sotrPrint(const std::vector<tupIp>& addrs, bool(*func)(const tupIp&));
+class textIP {
+
+public:
+	void printIP(const arrIp& ip);
+	arrIp parse(const std::string& input);
+	void checkIp(const arrIp& ip);
+	void sotrPrint(const std::vector<arrIp>& addrs, bool(*func)(const arrIp&));
+};
