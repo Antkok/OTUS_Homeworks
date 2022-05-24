@@ -6,10 +6,12 @@ else()
     project(print_ip VERSION 0.0.3)
 endif()
 
+option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package (Threads REQUIRED)
 
-configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
+configure_file(version.h.in version.h)
 
 #add_subdirectory(
 #       "${CMAKE_CURRENT_SOURCE_DIR}/gtest"
@@ -40,6 +42,7 @@ target_link_libraries(print_ip
 
 target_link_libraries(test_boost
     ${Boost_LIBRARIES}
+	print_ip
 )
 
 #target_link_libraries(test_google
