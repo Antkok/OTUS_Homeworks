@@ -21,7 +21,7 @@ add_library(print_ip.lib STATIC lib.cpp)
 add_executable(test_boost testboost.cpp)
 #add_executable(test_google testg.cpp)
 
-set_target_properties(print_ip  print_ip.lib test_google PROPERTIES #test_boost
+set_target_properties(print_ip  print_ip.lib test_boost PROPERTIES #test_google
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
