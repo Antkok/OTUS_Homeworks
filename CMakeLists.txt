@@ -29,6 +29,11 @@ target_link_libraries(print_ip
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
     add_executable(test_boost testboost.cpp)
+    
+    set_target_properties(test_boost PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+    )
 
     set_target_properties(test_boost PROPERTIES
         COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
