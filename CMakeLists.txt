@@ -1,51 +1,41 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+if($ENV{TRAVIS_BUILD_NUMBER}) 
+    project(print_ip VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+else()
+    project(print_ip VERSION 0.0.3)
+endif()
 
-project(print_ip VERSION ${PROJECT_VESRION})
 
-option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-configure_file(version.h.in version.h)
+configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
 
 add_executable(print_ip main.cpp)
+add_library(print_ip.lib STATIC lib.cpp)
+add_executable(test_boost testboost.cpp)
 
-add_library(print_ip.lib lib.cpp)
-
-set_target_properties(print_ip  print_ip.lib PROPERTIES
+set_target_properties(print_ip  print_ip.lib test_boost PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
 target_include_directories(print_ip.lib
-    PRIVATE "${CMAKE_BINARY_DIR}"
+    PUBLIC "${CMAKE_BINARY_DIR}"
 )
 
-target_include_directories(print_ip
-    PRIVATE "${CMAKE_BINARY_DIR}"
+set_target_properties(test_boost PROPERTIES
+    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
 
-if(WITH_BOOST_TEST)
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-    
-    add_executable(test_boost testboost.cpp)
-    
-    set_target_properties(test_boost PROPERTIES
-        CXX_STANDARD 17
-        CXX_STANDARD_REQUIRED ON
-    )
+target_link_libraries(print_ip
+    print_ip.lib
+)
 
-    set_target_properties(test_boost PROPERTIES
-        COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-        INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-    )
-
-    target_link_libraries(test_boost
-        ${Boost_LIBRARIES}
-        print_ip.lib
-    )
-endif()
+target_link_libraries(test_boost
+    ${Boost_LIBRARIES}
+)
 
 if (MSVC)
     target_compile_options(print_ip PRIVATE
@@ -54,11 +44,9 @@ if (MSVC)
     target_compile_options(print_ip.lib PRIVATE
         /W4
     )
-    if(WITH_BOOST_TEST)
-        target_compile_options(test_boost PRIVATE
-            /W4
-        )
-    endif()
+    target_compile_options(test_boost PRIVATE
+        /W4
+    )
 else ()
     target_compile_options(print_ip PRIVATE
         -Wall -Wextra -pedantic -Werror
@@ -66,11 +54,9 @@ else ()
     target_compile_options(print_ip.lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    if(WITH_BOOST_TEST)
-        target_compile_options(test_boost PRIVATE
-            -Wall -Wextra -pedantic -Werror
-        )
-    endif()
+    target_compile_options(test_boost PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
 endif()
 
 install(TARGETS print_ip RUNTIME DESTINATION bin)
@@ -81,11 +67,9 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_CONTACT Antkok@yandex.ru)
+set(CPACK_PACKAGE_CONTACT lismut@gmail.com)
 
 include(CPack)
+enable_testing()
 
-if(WITH_BOOST_TEST)
-    enable_testing()
-    add_test(test_valid_version print_ip)
-endif()
+add_test(test_valid_version print_ip)
