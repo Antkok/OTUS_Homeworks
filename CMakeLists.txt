@@ -42,7 +42,6 @@ if(WITH_BOOST_TEST)
 
     target_link_libraries(test_boost
         ${Boost_LIBRARIES}
-    	print_ip.lib
     )
 endif()
 
