@@ -27,8 +27,8 @@ target_include_directories(print_ip.lib
     PUBLIC "${CMAKE_BINARY_DIR}"
 )
 
-target_include_directories(print_ip
-    PRIVATE "${CMAKE_BINARY_DIR}"
+target_link_libraries(print_ip
+    print_ip.lib
 )
 
 if(WITH_BOOST_TEST)
@@ -42,7 +42,7 @@ if(WITH_BOOST_TEST)
 
     target_link_libraries(test_boost
         ${Boost_LIBRARIES}
-    	print_ip
+    	print_ip.lib
     )
 endif()
 
