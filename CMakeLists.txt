@@ -11,7 +11,7 @@ configure_file(version.h.in version.h)
 
 add_executable(print_ip main.cpp)
 
-add_library(print_ip.lib STATIC lib.cpp)
+add_library(print_ip.lib lib.cpp)
 
 set_target_properties(print_ip  print_ip.lib PROPERTIES
     CXX_STANDARD 17
@@ -22,12 +22,13 @@ target_include_directories(print_ip.lib
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
-target_link_libraries(print_ip
-    print_ip.lib
+target_include_directories(print_ip
+    PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    
     add_executable(test_boost testboost.cpp)
     
     set_target_properties(test_boost PROPERTIES
