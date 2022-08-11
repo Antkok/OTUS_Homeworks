@@ -41,7 +41,8 @@ public:
                 for (;currentShift < ElemCount; ++currentShift) {
                     freeElems.push_back(packs.front() + currentShift);
                 }
-            p = tempAlloc(n);
+            tempAlloc(n);
+            p = point;
             currentShift = n;
         }
         return p;
@@ -71,6 +72,7 @@ public:
 private:
     std::list<pointer> packs;
     std::list<pointer> freeElems;
+    pointer point;
     size_t currentShift = 0;
     pointer tempAlloc (size_t cnt) {
         size_t sz = std::max(cnt, (size_t)ElemCount);
@@ -79,6 +81,8 @@ private:
             throw std::bad_alloc();
         }
         packs.push_front(p);
-        return p;
+        point = p;
+        free(p);
+        return 0;
     }
 };
