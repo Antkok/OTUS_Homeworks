@@ -7,6 +7,7 @@ else()
     project(allocator VERSION 0.0.3)
 endif()
 
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 # CONFIGURATIONS
 configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
 
@@ -15,9 +16,10 @@ add_executable(allocator main.cpp)
 add_library(lib.lib lib.cpp)
 add_library(my_allocator.lib my_allocator.cpp)
 add_library(list.lib list.cpp)
+add_executable(testboost testboost.cpp)
 
 # CPP STANDARD REQUIREMENTS
-set_target_properties(allocator lib.lib PROPERTIES
+set_target_properties(allocator lib.lib testboost PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
@@ -26,8 +28,18 @@ target_include_directories(lib.lib
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
+set_target_properties(testboost PROPERTIES
+    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
+)
+
 target_link_libraries(allocator PRIVATE
     lib.lib my_allocator.lib list.lib
+)
+
+target_link_libraries(testboost
+    ${Boost_LIBRARIES}
+    lib.lib
 )
 
 if (MSVC)
@@ -37,11 +49,17 @@ if (MSVC)
     target_compile_options(lib.lib PRIVATE
         /W4
     )
+	target_compile_options(testboost PRIVATE
+        /W4
+    )
 else ()
     target_compile_options(allocator PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(lib.lib PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+	target_compile_options(testboost PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
@@ -57,3 +75,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT Antkok@yandex.ru)
 
 include(CPack)
+
+enable_testing()
+
+add_test(testboost testboost)
