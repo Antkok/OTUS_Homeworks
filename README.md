@@ -1,1 +1,2 @@
-// OTUS_Homeworks
+# otus-cpp
+Otus C++ course
