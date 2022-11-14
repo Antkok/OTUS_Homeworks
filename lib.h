@@ -4,8 +4,6 @@
 #include <tuple>
 #include <algorithm>
 #include <type_traits>
-#include <vector>
-#include <list>
 
 int version();
 
@@ -24,27 +22,19 @@ typename std::enable_if_t<std::is_integral_v<T>, std::string> print_view_ip(cons
     return result;
 }
 
-/// \brief Type traits for vector
-/// \details Returns false for not vector
-template<typename T> struct is_vector : std::false_type {};
-/// \brief Type traits for vector
-/// \details Returns true for vector
-template<typename... Ts> struct is_vector<std::vector<Ts...>> : std::true_type {};
-
 /// \brief Template function for print view of ip.
-/// \details Vector specialization.
+/// \details Specialization for containers.
 template<typename T>
-typename std::enable_if_t<is_vector<T>::value, std::string> print_view_ip(const T& t)
+decltype(begin(std::declval<T>()), end(std::declval<T>()), std::string()) print_view_ip(const T& container)
 {
     std::string result;
-    auto last = end(t);
-    for(auto elem = begin(t); elem != last; ++elem) {
+    auto last = end(container);
+    for(auto elem = begin(container); elem != last; ++elem) {
         result += std::to_string(*elem) + ".";
     }
     result.pop_back();
     return result;
 }
-
 
 /// \brief Type traits for tuple
 /// \details Returns false for not tuples
@@ -69,25 +59,4 @@ typename std::enable_if_t<is_tuple<T>::value, std::string> print_view_ip(const T
 std::string print_view_ip(const std::string& value)
 {
     return value;
-}
-
-/// \brief Type traits for list
-/// \details Returns false for not list
-template<typename T> struct is_list : std::false_type {};
-/// \brief Type traits for list
-/// \details Returns true for list
-template<typename... Ts> struct is_list<std::list<Ts...>> : std::true_type {};
-
-/// \brief Template function for print view of ip.
-/// \details List specialization.
-template<typename T>
-typename std::enable_if_t<is_list<T>::value, std::string> print_view_ip(const T& t)
-{
-    std::string result;
-    auto last = end(t);
-    for (auto elem = begin(t); elem != last; ++elem) {
-        result += std::to_string(*elem) + ".";
-    }
-    result.pop_back();
-    return result;
 }

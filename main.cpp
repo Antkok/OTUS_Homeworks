@@ -1,29 +1,29 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <tuple>
-#include <list>
+#include <cassert>
 #include "lib.h"
+#include "matrix.h"
 
-/// \brief Template function to print ip
-template <typename T>
-void print_ip(T ip)
+void final_func()
 {
-    std::cout << print_view_ip(ip) << std::endl;
+    matrix<int, 0> Matrix;
+    const int sz = 9;
+    for (auto i = 0; i <= sz; ++i){
+        Matrix[i][i] = i;
+        Matrix[i][sz - i] = sz - i;
+    }
+    //print_matr(Matrix);
+    for (auto i = 1; i < 8; ++i) {
+        for (auto j = 1; j < 8; ++j) {
+            std::cout << Matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 /// \brief Some examples
 int main()
 {
-    //std::cout << "Print IP version " << version() << std::endl;
-    print_ip(int8_t{ -1 }); // 255
-    print_ip(int16_t{ 0 }); // 0.0
-    print_ip(int32_t{ 2130706433 }); // 127.0.0.1
-    print_ip(int64_t{ 8875824491850138409 });// 123.45.67.89.101.112.131.41
-    print_ip(std::string{ "Hello, World!"}); // Hello, World!
-    print_ip(std::vector<int>{100, 200, 300, 400}); // 100.200.300.400
-    print_ip(std::list<short>{400, 300, 200, 100}); // 400.300.200.100
-    print_ip(std::make_tuple(123, 456, 789, 0)); // 123.456.789.0
-      
+    final_func();
+
     return 0;
 }

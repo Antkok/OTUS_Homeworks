@@ -1,63 +1,65 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+if($ENV{TRAVIS_BUILD_NUMBER}) 
+    project(matrix VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+else()
+    project(matrix VERSION 0.0.3)
+endif()
 
-project(print_ip VERSION ${PROJECT_VESRION})
-
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package (Threads REQUIRED)
 
 configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
 
-add_executable(print_ip main.cpp)
-add_library(print_ip.lib STATIC lib.cpp)
-add_executable(test_boost testboost.cpp)
+add_subdirectory(
+       "${CMAKE_CURRENT_SOURCE_DIR}/gtest"
+       googletest
+)
 
-set_target_properties(print_ip  print_ip.lib test_boost PROPERTIES
+add_executable(matrix main.cpp matrix.cpp)
+add_library(matrix.lib STATIC lib.cpp)
+add_executable(test_google test.cpp)
+
+set_target_properties(matrix matrix.lib test_google PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(print_ip.lib
+target_include_directories(matrix.lib
     PUBLIC "${CMAKE_BINARY_DIR}"
 )
 
-set_target_properties(test_boost PROPERTIES
-    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
+target_link_libraries(matrix
+    matrix.lib
 )
 
-target_link_libraries(print_ip
-    print_ip.lib
-)
-
-target_link_libraries(test_boost
-    ${Boost_LIBRARIES}
+target_link_libraries(test_google
+    gtest
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 if (MSVC)
-    target_compile_options(print_ip PRIVATE
+    target_compile_options(matrix PRIVATE
         /W4
     )
-    target_compile_options(print_ip.lib PRIVATE
+    target_compile_options(matrix.lib PRIVATE
         /W4
     )
-    target_compile_options(test_boost PRIVATE
+    target_compile_options(test_google PRIVATE
         /W4
     )
 else ()
-    target_compile_options(print_ip PRIVATE
+    target_compile_options(matrix PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(print_ip.lib PRIVATE
+    target_compile_options(matrix.lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(test_boost PRIVATE
+    target_compile_options(test_google PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
 
-install(TARGETS print_ip RUNTIME DESTINATION bin)
+install(TARGETS matrix RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -65,9 +67,11 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_CONTACT Antkok@yandex.ru)
+set(CPACK_PACKAGE_CONTACT lismut@gmail.com)
 
 include(CPack)
 enable_testing()
 
-add_test(test_valid_version print_ip)
+add_test(GOOGLE_TEST1 matrix)
+add_test(GOOGLE_TEST2 matrix)
+add_test(GOOGLE_TEST3 matrix)
