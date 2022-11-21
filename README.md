@@ -1,2 +1,1 @@
-# otus-cpp
-Otus C++ course
+# Homework 7
