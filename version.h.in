@@ -1,0 +1,16 @@
+/**
+ * @file version.h
+ * @brief Project version announcement.
+ */
+
+#ifndef YAMR_VERSION_H_
+#define YAMR_VERSION_H_
+
+#define YAMR_MAJOR @YAMR_MAJOR@
+#define YAMR_MINOR @YAMR_MINOR@
+#define YAMR_PATCH @YAMR_PATCH@
+
+#define YAMR_VERSION \
+    (YAMR_MAJOR * 10000 + YAMR_MINOR * 100 + YAMR_PATCH)
+
+#endif /* YAMR_VERSION_H_ */
