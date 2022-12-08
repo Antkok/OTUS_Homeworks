@@ -1,0 +1,26 @@
+env:
+  - PROJECT="bulk_server"
+language: cpp
+dist: bionic
+before_install:
+  - sudo apt-get update -q
+  - sudo apt-get install doxygen graphviz -y
+script:
+  - cd $PROJECT
+  - make contrib
+  - make
+  - make test
+  - make package
+  - make doc
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: bash ../deploy.sh $TRAVIS_BRANCH $BINTRAY_API_KEY
+    on:
+      all_branches: true
+  - provider: pages
+    local_dir: _result/doc
+    skip_cleanup: true
+    github_token: $GITHUB_API_KEY
+    on:
+      all_branches: true
