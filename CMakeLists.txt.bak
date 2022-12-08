@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.2)
 
 
 if(DEFINED ENV{TRAVIS_BUILD_NUMBER})
-    project(10-join_server VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+    project(13-join_server VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else()
-    project(10-join_server VERSION 0.0.1)
+    project(13-join_server VERSION 0.0.1)
 endif()
 
 configure_file(version.h.in version.h)
@@ -74,7 +74,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_CONTACT Antkok@ya.ru)
+set(CPACK_PACKAGE_CONTACT example@example.com)
 
 include(CPack)
 
